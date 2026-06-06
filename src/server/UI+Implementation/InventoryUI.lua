@@ -276,7 +276,7 @@ function InventoryUI:ShowInventory(playerId, PlayerDataManager, InventoryManager
             carNameLabel.TextWrapped = true
             carNameLabel.Parent = carFrame
             
-            -- Income display
+            -- Income display - ✅ FIXED: Parent changed to carFrame
             local incomeLabel = Instance.new("TextLabel")
             incomeLabel.Size = UDim2.new(0.4, 0, 0.4, 0)
             incomeLabel.Position = UDim2.new(0.6, 0, 0.6, 0)
@@ -285,7 +285,7 @@ function InventoryUI:ShowInventory(playerId, PlayerDataManager, InventoryManager
             incomeLabel.TextColor3 = car.owned and UI_COLORS.ACCENT_GREEN or Color3.fromRGB(100, 100, 100)
             incomeLabel.TextSize = 9
             incomeLabel.Font = Enum.Font.Gotham
-            incomeLabel.Parent = incomeLabel
+            incomeLabel.Parent = carFrame  -- ✅ FIX #1: Was incomeLabel, now carFrame
         end
         
         -- Update grid layout
