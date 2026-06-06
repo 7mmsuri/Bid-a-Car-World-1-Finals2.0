@@ -27,9 +27,11 @@ local UI_COLORS = {
     Create and show lobby UI for a player
     @param playerId: string - Player ID
     @param PlayerDataManager: module - Player data manager
+    @param InventoryManager: module - Inventory manager
+    @param ItemDatabase: module - Item database
     @return: table - UI frame reference
 ]]
-function LobbyUI:ShowLobbyUI(playerId, PlayerDataManager)
+function LobbyUI:ShowLobbyUI(playerId, PlayerDataManager, InventoryManager, ItemDatabase)
     local player = Players:FindFirstChild(tostring(playerId))
     if not player then
         return nil
@@ -61,7 +63,7 @@ function LobbyUI:ShowLobbyUI(playerId, PlayerDataManager)
     )
     eventsBtn.Parent = screenGui
     
-    -- Garage Button (Cyan) - Triggers TierSelectionUI
+    -- Garage Button (Cyan) - Teleport to Plot
     local garageBtn = self:CreateButton(
         "Garage",
         UI_COLORS.PRIMARY_CYAN,
@@ -71,12 +73,12 @@ function LobbyUI:ShowLobbyUI(playerId, PlayerDataManager)
     garageBtn.Parent = screenGui
     garageBtn.MouseButton1Click:Connect(function()
         print("[LobbyUI] Garage button clicked for player " .. tostring(playerId))
-        -- Trigger TierSelectionUI
-        local TierSelectionUI = require(script.Parent:WaitForChild("TierSelectionUI"))
-        TierSelectionUI:ShowTierSelection(playerId, PlayerDataManager)
+        -- ✅ TELEPORT TO PLOT (Player's Garage)
+        local TeleportManager = require(script.Parent.Parent:WaitForChild("managers"):WaitForChild("TeleportManager"))
+        TeleportManager:TeleportToLobby(playerId)  -- This will teleport to PLOT location
     end)
     
-    -- Shop Button (Lime Green) - Teleport to Merchant
+    -- Shop Button (Lime Green) - Teleport to Merchant (Dice Shop)
     local shopBtn = self:CreateButton(
         "Shop",
         UI_COLORS.ACCENT_GREEN,
@@ -137,7 +139,8 @@ function LobbyUI:ShowLobbyUI(playerId, PlayerDataManager)
     inventoryBtn.MouseButton1Click:Connect(function()
         print("[LobbyUI] Inventory button clicked for player " .. tostring(playerId))
         local InventoryUI = require(script.Parent:WaitForChild("InventoryUI"))
-        InventoryUI:ShowInventory(playerId, PlayerDataManager, "cars")
+        -- ✅ FIXED #2: Pass all required parameters (InventoryManager, ItemDatabase)
+        InventoryUI:ShowInventory(playerId, PlayerDataManager, InventoryManager, ItemDatabase, "cars")
     end)
     
     -- Settings Button
