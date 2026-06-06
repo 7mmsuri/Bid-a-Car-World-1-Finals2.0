@@ -1,7 +1,6 @@
 --[[
     ShopManager.lua
     Purpose: Dice shop where players buy dice for NPC generation
-    FIXES: GetDiceList() → GetInventory(playerId, "dice")
 ]]
 
 local ShopManager = {}
@@ -45,18 +44,19 @@ end
 
 --[[
     Open dice to get NPC
-    FIX: Changed GetDiceList() to GetInventory(playerId, "dice")
+    ✅ FIXED #3: Changed to use PlayerDataManager:GetInventory instead of non-existent GetDiceList
     
     @param playerId: string - Player ID
     @param diceId: string - Dice ID
     @return: table - Generated NPC
 ]]
 function ShopManager:OpenDice(playerId, diceId)
+    local PlayerDataManager = require(script.Parent:WaitForChild("PlayerDataManager"))
     local InventoryManager = require(script.Parent:WaitForChild("InventoryManager"))
     local DiceRNG = require(script.Parent:WaitForChild("DiceRNG"))
     
-    -- FIX: Use GetInventory instead of non-existent GetDiceList
-    local diceList = InventoryManager:GetInventory(playerId, "dice")
+    -- ✅ FIXED #3: Use PlayerDataManager:GetInventory instead of InventoryManager:GetInventory
+    local diceList = PlayerDataManager:GetInventory(playerId, "dice")
     local dice = nil
     
     for _, d in ipairs(diceList) do
